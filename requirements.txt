@@ -1,0 +1,28 @@
+# API & Backend
+fastapi
+uvicorn
+python-multipart
+pydantic
+python-dotenv
+python-jose
+bcrypt
+passlib
+
+# Database 
+supabase
+pinecone-client
+
+# AI & Orchestration
+langchain
+langgraph
+langchain-groq
+langchain-google-genai
+
+# RAG specific libraries
+langchain-huggingface
+pypdf
+sentence-transformers
+
+# Utilities & Interfaces
+streamlit
+requests
