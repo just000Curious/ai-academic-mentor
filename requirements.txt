@@ -10,7 +10,7 @@ passlib
 
 # Database 
 supabase
-pinecone-client
+pinecone
 
 # AI & Orchestration
 langchain
@@ -26,3 +26,5 @@ sentence-transformers
 # Utilities & Interfaces
 streamlit
 requests
+
+email-validator

@@ -1,3 +1,5 @@
+﻿from dotenv import load_dotenv
+load_dotenv()
 import os 
 from supabase import create_client, Client 
 from dotenv import load_dotenv 
@@ -55,7 +57,7 @@ def _clean_text(val):
 
 
 def load_memory(project_id: int):
-    print(f"--- 📥 Loading full context from DB for project {project_id} ---")
+    print(f"--- ðŸ“¥ Loading full context from DB for project {project_id} ---")
     
     # 1. Fetch Student Profile
     idea_res = supabase.table("project_idea").select("*").eq("project_id", project_id).execute()
@@ -151,4 +153,5 @@ def save_memory(project_id: int, result: dict):
         supabase.table("agent_output").update(record).eq("project_id", project_id).execute()
     else:
         supabase.table("agent_output").insert(record).execute()
-    print(f"   💾 Memory saved for project {project_id}")
+    print(f"   ðŸ’¾ Memory saved for project {project_id}")
+

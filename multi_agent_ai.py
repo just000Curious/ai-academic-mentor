@@ -1,3 +1,5 @@
+﻿from dotenv import load_dotenv
+load_dotenv()
 import os
 import time
 import re
@@ -18,7 +20,7 @@ if api_key:
     try:
         genai_client = genai.Client(api_key=api_key)
     except Exception as e:
-        print(f"⚠️ Error initializing Google GenAI Client: {e}")
+        print(f"âš ï¸ Error initializing Google GenAI Client: {e}")
 
 # Prioritized list of active Gemini models
 ACTIVE_MODELS = [
@@ -170,17 +172,17 @@ def safe_invoke(prompt, max_retries_per_model=2):
 
                 if is_quota_exhausted or is_not_found:
                     # Model has exhausted quota or is unavailable; immediately failover to next model
-                    print(f"   ℹ️ Model {model_name} quota/availability issue ({e}). Switching to next model...", flush=True)
+                    print(f"   â„¹ï¸ Model {model_name} quota/availability issue ({e}). Switching to next model...", flush=True)
                     break
                 elif is_transient:
                     wait_time = 1.0 * (attempt + 1)
-                    print(f"   ⏳ Model {model_name} transient error ({e}). Retrying in {wait_time:.1f}s ({attempt+1}/{max_retries_per_model})...", flush=True)
+                    print(f"   â³ Model {model_name} transient error ({e}). Retrying in {wait_time:.1f}s ({attempt+1}/{max_retries_per_model})...", flush=True)
                     time.sleep(wait_time)
                 else:
-                    print(f"   ⚠️ Model {model_name} error ({e}). Trying next model...", flush=True)
+                    print(f"   âš ï¸ Model {model_name} error ({e}). Trying next model...", flush=True)
                     break
 
-    print("   ℹ️ Returning formatted fallback report output.", flush=True)
+    print("   â„¹ï¸ Returning formatted fallback report output.", flush=True)
     return _get_offline_fallback(prompt)
 
 
@@ -211,7 +213,7 @@ class Agent_State(TypedDict):
 
 
 def student_assesment_agent(state: Agent_State):
-    print("--- 📊 Assessing Student Profile & Skills... ---", flush=True)
+    print("--- ðŸ“Š Assessing Student Profile & Skills... ---", flush=True)
     profile = state.get('student_profile', 'Unknown profile')
     questionnaire = state.get('skill_questionnaire', 'Unknown skills')
 
@@ -241,11 +243,11 @@ LATEST STUDENT REQUEST: {state.get('new_message', 'No new request')}
 REFERENCE DOCUMENTS: {state.get('reference_documents', 'None provided')}"""
 
     result = safe_invoke(prompt)
-    return {"skill_report": result, "agents_executed": ["📊 Skill Assessor"]}
+    return {"skill_report": result, "agents_executed": ["ðŸ“Š Skill Assessor"]}
 
 
 def project_evaluation_agent(state: Agent_State):
-    print("--- 📋 Evaluating Project Scope & Feasibility... ---", flush=True)
+    print("--- ðŸ“‹ Evaluating Project Scope & Feasibility... ---", flush=True)
     idea = state.get('project_idea', 'Unknown idea')
     skills = state.get('skill_report', 'Unknown skills')
 
@@ -282,11 +284,11 @@ LATEST STUDENT REQUEST: {state.get('new_message', 'No new request')}
 REFERENCE DOCUMENTS: {state.get('reference_documents', 'None provided')}"""
 
     result = safe_invoke(prompt)
-    return {"project_evaluation": result, "agents_executed": ["📋 Project Evaluator"]}
+    return {"project_evaluation": result, "agents_executed": ["ðŸ“‹ Project Evaluator"]}
 
 
 def project_planing_agent(state: Agent_State):
-    print("--- 📅 Planning Milestones & Roadmap... ---", flush=True)
+    print("--- ðŸ“… Planning Milestones & Roadmap... ---", flush=True)
     evaluation = state.get('project_evaluation', 'No evaluation')
 
     prompt = f"""You are an expert Agile Project Manager.
@@ -322,11 +324,11 @@ LATEST STUDENT REQUEST: {state.get('new_message', 'No new request')}
 REFERENCE DOCUMENTS: {state.get('reference_documents', 'None provided')}"""
 
     result = safe_invoke(prompt)
-    return {"project_plan": result, "agents_executed": ["📅 Project Planner"]}
+    return {"project_plan": result, "agents_executed": ["ðŸ“… Project Planner"]}
 
 
 def tech_recommendation_agent(state: Agent_State):
-    print("--- 💻 Recommending Technology Stack... ---", flush=True)
+    print("--- ðŸ’» Recommending Technology Stack... ---", flush=True)
     plan = state.get('project_plan', 'No plan')
     skills = state.get('skill_report', 'No skills')
 
@@ -351,11 +353,11 @@ LATEST STUDENT REQUEST: {state.get('new_message', 'No new request')}
 REFERENCE DOCUMENTS: {state.get('reference_documents', 'None provided')}"""
 
     result = safe_invoke(prompt)
-    return {"tech_stack": result, "agents_executed": ["💻 Tech Architect"]}
+    return {"tech_stack": result, "agents_executed": ["ðŸ’» Tech Architect"]}
 
 
 def risk_analysis_agent(state: Agent_State):
-    print("--- ⚠️ Analyzing Technical Risks & Roadblocks... ---", flush=True)
+    print("--- âš ï¸ Analyzing Technical Risks & Roadblocks... ---", flush=True)
     plan = state.get('project_plan', 'No plan')
     tech = state.get('tech_stack', 'No tech stack')
     skills = state.get('skill_report', 'No skills')
@@ -402,11 +404,11 @@ REFERENCE DOCUMENTS: {state.get('reference_documents', 'None provided')}"""
 
     result = safe_invoke(prompt)
     cleaned_result = re.sub(r'<reasoning>[\s\S]*?</reasoning>', '', result).strip()
-    return {"risk_analysis": cleaned_result, "agents_executed": ["⚠️ Risk Analyst"]}
+    return {"risk_analysis": cleaned_result, "agents_executed": ["âš ï¸ Risk Analyst"]}
 
 
 def mentor_agent(state: Agent_State):
-    print("--- 🤝 Providing Academic Mentorship Advice... ---", flush=True)
+    print("--- ðŸ¤ Providing Academic Mentorship Advice... ---", flush=True)
     skills = state.get('skill_report', 'No skills')
     risks = state.get('risk_analysis', 'No risks')
 
@@ -424,11 +426,11 @@ LATEST STUDENT REQUEST: {state.get('new_message', 'No new request')}
 REFERENCE DOCUMENTS: {state.get('reference_documents', 'None provided')}"""
 
     result = safe_invoke(prompt)
-    return {"mentor_advice": result, "agents_executed": ["🤝 Mentor Advisor"]}
+    return {"mentor_advice": result, "agents_executed": ["ðŸ¤ Mentor Advisor"]}
 
 
 def documentation_agent(state: Agent_State):
-    print("--- 📝 Compiling Comprehensive Final Documentation... ---", flush=True)
+    print("--- ðŸ“ Compiling Comprehensive Final Documentation... ---", flush=True)
     idea = state.get('project_idea', 'No idea')
     plan = state.get('project_plan', 'No plan')
     tech = state.get('tech_stack', 'No tech')
@@ -456,14 +458,14 @@ LATEST STUDENT REQUEST: {state.get('new_message', 'No new request')}
 REFERENCE DOCUMENTS: {state.get('reference_documents', 'None provided')}"""
 
     result = safe_invoke(prompt)
-    return {"final_documentation": result, "agents_executed": ["📝 Documentation Writer"]}
+    return {"final_documentation": result, "agents_executed": ["ðŸ“ Documentation Writer"]}
 
 
 def chat_responder_agent(state: Agent_State):
-    print("--- 🗣️ Generating Conversational Reply... ---", flush=True)
+    print("--- ðŸ—£ï¸ Generating Conversational Reply... ---", flush=True)
     chat_hist = str(state.get('chat_history', 'This is the first interaction.'))[-1000:]
 
-    prompt = f"""You are the AI Mentor Team Coordinator — the unified voice of a multi-agent academic specialist team.
+    prompt = f"""You are the AI Mentor Team Coordinator â€” the unified voice of a multi-agent academic specialist team.
 Your job is to respond directly and helpfully to the student's message by synthesizing insights from your specialist agents.
 
 --- CONTEXT ---
@@ -490,11 +492,11 @@ Risk Analysis: {str(state.get('risk_analysis', 'Not yet generated'))[:400]}
         result = result[11:-3].strip()
     elif result.startswith("```"):
         result = result[3:-3].strip()
-    return {"chat_reply": result, "agents_executed": ["🗣️ AI Mentor Chat"]}
+    return {"chat_reply": result, "agents_executed": ["ðŸ—£ï¸ AI Mentor Chat"]}
 
 
 def plan_adjustment_agent(state: Agent_State):
-    print("--- 🔄 Adjusting Project Plan... ---", flush=True)
+    print("--- ðŸ”„ Adjusting Project Plan... ---", flush=True)
     plan = state.get('project_plan', '')
     update = state.get('progress_update', '')
 
@@ -511,11 +513,11 @@ Progress Update: {update}
 Output ONLY the revised markdown plan."""
 
     result = safe_invoke(prompt)
-    return {"project_plan": result, "agents_executed": ["🔄 Plan Adjuster"]}
+    return {"project_plan": result, "agents_executed": ["ðŸ”„ Plan Adjuster"]}
 
 
 def weekly_checkin_agent(state: Agent_State):
-    print("--- 📅 Running Weekly Check-in... ---", flush=True)
+    print("--- ðŸ“… Running Weekly Check-in... ---", flush=True)
     plan = state.get('project_plan', '')
     update = state.get('progress_update', 'No update provided.')
 
@@ -527,12 +529,12 @@ Project Plan: {plan}
 Latest Progress Update: {update}"""
 
     result = safe_invoke(prompt)
-    return {"check_in_report": result, "agents_executed": ["📅 Check-in Mentor"]}
+    return {"check_in_report": result, "agents_executed": ["ðŸ“… Check-in Mentor"]}
 
 
 def document_generation_agent(state: Agent_State):
     doc_type = state.get('document_type', 'Synopsis')
-    print(f"--- 📄 Generating Document: {doc_type} ---", flush=True)
+    print(f"--- ðŸ“„ Generating Document: {doc_type} ---", flush=True)
     idea = state.get('project_idea', '')
     plan = state.get('project_plan', '')
     tech = state.get('tech_stack', '')
@@ -557,7 +559,7 @@ DOCUMENT SPECIFICATIONS FOR "{doc_type}":
 - Output clean, structured Markdown with headings, bullet points, and code blocks where applicable."""
 
     result = safe_invoke(prompt)
-    return {"generated_document": result, "agents_executed": ["📄 Document Writer"]}
+    return {"generated_document": result, "agents_executed": ["ðŸ“„ Document Writer"]}
 
 
 # --- GRAPH DEFINITIONS ---
@@ -613,3 +615,4 @@ doc_builder.add_node("document_generation", document_generation_agent)
 doc_builder.add_edge(START, "document_generation")
 doc_builder.add_edge("document_generation", END)
 document_generation_app = doc_builder.compile()
+

@@ -1,5 +1,8 @@
-import os
+﻿import os
 import shutil
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -118,7 +121,7 @@ def get_student(student_id: int):
 
 @app.post("/upload")
 def upload_document(project_id: int = Form(...), description: str = Form(...), file: UploadFile = File(...)):
-    print(f"--- 📥 Received document {file.filename} for project {project_id} ---")
+    print(f"--- ðŸ“¥ Received document {file.filename} for project {project_id} ---")
     temp_file_path = f"temp_{file.filename}"
     
     with open(temp_file_path, "wb") as buffer:
@@ -188,7 +191,7 @@ def clean_output_text(val):
 
 @app.post("/initialize")
 def initialize_project(request: InitInput):
-    print(f"--- 🚀 Starting Initialization Pipeline for project {request.project_id} ---")
+    print(f"--- ðŸš€ Starting Initialization Pipeline for project {request.project_id} ---")
     try:
         # 1. Load basic memory 
         initial_state = load_memory(request.project_id)
@@ -205,7 +208,7 @@ def initialize_project(request: InitInput):
             try:
                 ingest_text(res["final_documentation"], request.project_id)
             except Exception as rag_err:
-                print(f"⚠️ Vector ingestion warning: {rag_err}")
+                print(f"âš ï¸ Vector ingestion warning: {rag_err}")
 
         return {
             "status": "success",
@@ -220,7 +223,7 @@ def initialize_project(request: InitInput):
         }
     except Exception as e:
         import traceback
-        print(f"❌ Initialization pipeline exception: {e}")
+        print(f"âŒ Initialization pipeline exception: {e}")
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"AI Agent pipeline error: {str(e)}")
 
@@ -262,7 +265,7 @@ def chat(request: ChatInput):
 
 @app.post("/progress_update")
 def progress_update(request: ProgressInput):
-    print(f"--- 🔄 Received progress update for project {request.project_id} ---")
+    print(f"--- ðŸ”„ Received progress update for project {request.project_id} ---")
     initial_state = load_memory(request.project_id)
     initial_state["progress_update"] = request.update_text
     initial_state["agents_executed"] = []
@@ -280,7 +283,7 @@ def progress_update(request: ProgressInput):
 
 @app.post("/check_in")
 def weekly_checkin(request: CheckinInput):
-    print(f"--- 📅 Running weekly check-in for project {request.project_id} ---")
+    print(f"--- ðŸ“… Running weekly check-in for project {request.project_id} ---")
     initial_state = load_memory(request.project_id)
     initial_state["agents_executed"] = []
     
@@ -295,7 +298,7 @@ def weekly_checkin(request: CheckinInput):
 
 @app.post("/generate_document")
 def generate_document(request: DocInput):
-    print(f"--- 📄 Generating document {request.doc_type} for project {request.project_id} ---")
+    print(f"--- ðŸ“„ Generating document {request.doc_type} for project {request.project_id} ---")
     initial_state = load_memory(request.project_id)
     initial_state["document_type"] = request.doc_type
     initial_state["agents_executed"] = []
@@ -475,3 +478,4 @@ def check_pinecone():
         return {"status": "ok", "message": "Pinecone connection is healthy.", "indexes": index_names}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Pinecone connection error: {str(e)}")
+
