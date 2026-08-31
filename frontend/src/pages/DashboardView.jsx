@@ -120,7 +120,7 @@ export default function DashboardView({ userProfile, onNavigate, onProjectsChang
     if (!token) return;
 
     try {
-      const response = await fetch('http://localhost:8000/projects/', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/projects/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

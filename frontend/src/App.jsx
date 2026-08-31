@@ -113,7 +113,7 @@ export default function App() {
 
         const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
         if (token) {
-          const response = await fetch('http://localhost:8000/projects/', {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/projects/`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -145,7 +145,7 @@ export default function App() {
     const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
     if (token) {
       try {
-        const response = await fetch('http://localhost:8000/projects/', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/projects/`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -183,7 +183,7 @@ export default function App() {
       
       const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
       if (token) {
-        const pResponse = await fetch('http://localhost:8000/projects/', {
+        const pResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/projects/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (pResponse.ok) {
@@ -209,7 +209,7 @@ export default function App() {
     setInitStage(0);
     try {
       const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
-      const response = await fetch('http://localhost:8000/initialize', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/initialize`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -237,7 +237,7 @@ export default function App() {
       });
       const token = localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
       if (token) {
-        const pResponse = await fetch('http://localhost:8000/projects/', {
+        const pResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/projects/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (pResponse.ok) {

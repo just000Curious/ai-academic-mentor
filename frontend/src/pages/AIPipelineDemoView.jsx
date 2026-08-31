@@ -47,7 +47,7 @@ export default function AIPipelineDemoView() {
         return;
       }
       try {
-        const response = await fetch('http://localhost:8000/projects/', {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/projects/`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -75,7 +75,7 @@ export default function AIPipelineDemoView() {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:8000/initialize', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/initialize`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ project_id: selectedProjectId })
@@ -106,7 +106,7 @@ export default function AIPipelineDemoView() {
     setIsChatting(true);
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ project_id: selectedProjectId, message: userMessage })

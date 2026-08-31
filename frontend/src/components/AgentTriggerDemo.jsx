@@ -9,7 +9,7 @@ export default function AgentTriggerDemo() {
     setMessage('Initializing Multi-Agent Pipeline...');
     
     try {
-      const response = await fetch('http://localhost:8000/initialize', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'}/initialize`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

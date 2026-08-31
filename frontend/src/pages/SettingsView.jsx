@@ -84,7 +84,7 @@ export default function SettingsView({ userProfile, currentTheme = 'pastel', onT
   const isDark = currentTheme === 'dark';
 
   const [sysConfig, setSysConfig] = useState({
-    apiEndpoint: 'http://localhost:8000',
+    apiEndpoint: (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'),
     modelProvider: 'Gemini 3.6 Flash (High Reasoning)',
     temperature: 0.7,
     autoSqlMigrations: true,
