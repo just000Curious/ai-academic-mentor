@@ -42,7 +42,7 @@ app.include_router(projects.router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -478,4 +478,5 @@ def check_pinecone():
         return {"status": "ok", "message": "Pinecone connection is healthy.", "indexes": index_names}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Pinecone connection error: {str(e)}")
+
 
