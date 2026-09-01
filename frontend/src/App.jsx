@@ -43,6 +43,7 @@ export default function App() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [currentTheme, setCurrentTheme] = useState(() => localStorage.getItem('app_theme') || 'pastel');
   const [showAuth, setShowAuth] = useState(false);
+  const [authMode, setAuthMode] = useState(null);
 
   const stages = [
     "Launching Multi-Agent Analysis...",
@@ -272,9 +273,9 @@ export default function App() {
 
   if (!isAuthenticated) {
     if (showAuth) {
-      return <AuthGateway onAuthSuccess={handleAuthSuccess} setUserProfile={setUserProfile} onBackToHome={() => setShowAuth(false)} />;
+      return <AuthGateway initialMode={authMode} onAuthSuccess={handleAuthSuccess} setUserProfile={setUserProfile} onBackToHome={() => setShowAuth(false)} />;
     }
-    return <LandingPage onGetStarted={() => setShowAuth(true)} />;
+    return <LandingPage onGetStarted={(mode) => { setAuthMode(mode || 'REGISTER'); setShowAuth(true); }} />;
   }
 
   // --- Initial loading checker ---

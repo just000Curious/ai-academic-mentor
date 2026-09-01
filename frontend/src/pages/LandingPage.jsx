@@ -179,7 +179,13 @@ export default function LandingPage({ onGetStarted }) {
               </span>
             </button>
             <button 
-              onClick={onGetStarted}
+              onClick={() => onGetStarted('LOGIN')}
+              className={`mr-4 px-4 py-2 text-xs font-bold transition-all cursor-pointer ${isDarkMode ? 'text-slate-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}
+            >
+              Login
+            </button>
+            <button 
+              onClick={() => onGetStarted('REGISTER')}
               className="px-5 py-2 text-xs font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-[size:200%_auto] hover:bg-[right_center] rounded-full transition-all duration-500 cursor-pointer shadow-md shadow-purple-500/10 hover:shadow-lg"
             >
               Sign Up
@@ -222,7 +228,7 @@ export default function LandingPage({ onGetStarted }) {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 type="button"
-                onClick={onGetStarted}
+                onClick={() => onGetStarted('REGISTER')}
                 className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 bg-[size:200%_auto] hover:bg-[right_center] text-white font-bold text-sm px-8 py-4 rounded-2xl shadow-lg shadow-purple-500/15 transition-all duration-500 hover:scale-[1.02] cursor-pointer"
               >
                 Get Started Onboarding
@@ -802,10 +808,10 @@ export default function LandingPage({ onGetStarted }) {
             
             <div className="pt-4">
               <button
-                onClick={onGetStarted}
+                onClick={() => onGetStarted('LOGIN')}
                 className="bg-white hover:bg-slate-50 text-slate-950 font-bold text-sm px-8 py-4 rounded-2xl shadow-lg transition-all hover:scale-[1.02] cursor-pointer"
               >
-                Launch Platform Portal
+                Login to Portal
               </button>
             </div>
           </div>

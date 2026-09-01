@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { apiService } from '../services/api';
 
-export default function AuthGateway({ onAuthSuccess, setUserProfile, onBackToHome }) {
+export default function AuthGateway({ onAuthSuccess, setUserProfile, onBackToHome, initialMode }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mode, setMode] = useState(() => {
+    if (initialMode) return initialMode;
     const isReturning = localStorage.getItem('is_returning_user') === 'true';
     return isReturning ? 'LOGIN' : 'REGISTER';
   });
