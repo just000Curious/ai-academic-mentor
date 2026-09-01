@@ -29,6 +29,7 @@ export default function ProjectSubmission({ onSubmitSuccess, onBack, currentThem
   const [description, setDescription] = useState('');
   const [domain, setDomain] = useState('');
   const [technologies, setTechnologies] = useState('');
+  const [deadline, setDeadline] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -52,7 +53,7 @@ export default function ProjectSubmission({ onSubmitSuccess, onBack, currentThem
         },
         body: JSON.stringify({ 
           title: title.trim(), 
-          description: description.trim(), 
+          description: deadline.trim() ? `${description.trim()}\n\n**Target Timeline/Deadline:** ${deadline.trim()}` : description.trim(), 
           domain: domain.trim(),
           technologies: techArray 
         })
@@ -178,6 +179,20 @@ export default function ProjectSubmission({ onSubmitSuccess, onBack, currentThem
                 placeholder="Spring Boot, SockJS, PostgreSQL, React" 
               />
             </div>
+          </div>
+
+          {/* TIMELINE / DEADLINE INPUT */}
+          <div className="space-y-1.5">
+            <label className={`block text-xs font-extrabold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Target Deadline / Duration (Optional)</label>
+            <input 
+              type="text" 
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+              className={`w-full px-4 py-3 border rounded-2xl text-xs font-semibold focus:ring-2 focus:ring-[#0252CD]/20 focus:border-[#0252CD] outline-none transition-all shadow-xs ${
+                isDark ? 'bg-slate-800 border-slate-700 text-white placeholder-slate-400' : 'bg-white/90 border-slate-200/80 text-slate-800'
+              }`} 
+              placeholder="e.g., 4 Weeks, Dec 15th, End of Semester" 
+            />
           </div>
 
           {/* ACTION BUTTONS */}
