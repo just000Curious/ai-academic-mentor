@@ -20,17 +20,33 @@ function MermaidRenderer({ chart }) {
     const id = `mermaid-svg-${Math.random().toString(36).substring(2, 9)}`;
     const cleanChart = chart.replace(/\\n/g, '\n').trim();
 
-    mermaid.render(id, cleanChart)
-      .then(({ svg }) => {
+    const renderChart = async () => {
+      try {
+        // Attempt to parse first to catch syntax errors
+        try {
+           await mermaid.parse(cleanChart, { suppressErrors: true });
+        } catch (parseErr) {
+           throw new Error("Mermaid syntax validation failed");
+        }
+        
+        const { svg } = await mermaid.render(id, cleanChart);
+        
+        // Mermaid sometimes resolves successfully but returns an error SVG
+        if (svg.includes("Syntax error") || svg.includes("mermaid version")) {
+          throw new Error("Mermaid returned an error SVG");
+        }
+        
         if (isMounted) {
           setSvg(svg);
           setRenderError(false);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.warn("Mermaid rendering fallback triggered:", err);
         if (isMounted) setRenderError(true);
-      });
+      }
+    };
+
+    renderChart();
 
     return () => { isMounted = false; };
   }, [chart]);
