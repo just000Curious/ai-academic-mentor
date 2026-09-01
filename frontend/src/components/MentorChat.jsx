@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import mermaid from 'mermaid';
 import { apiService } from '../services/api';
@@ -39,7 +39,7 @@ function MermaidRenderer({ chart }) {
     return (
       <div className="my-4 p-4 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 font-mono text-xs overflow-x-auto">
         <div className="flex items-center justify-between border-b border-slate-700 pb-2 mb-3">
-          <span className="text-[10px] uppercase font-bold text-blue-400">ðŸ“Š Architectural Block Diagram</span>
+          <span className="text-[10px] uppercase font-bold text-blue-400">📊 Architectural Block Diagram</span>
         </div>
         <pre className="whitespace-pre-wrap">{chart}</pre>
       </div>
@@ -330,7 +330,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
       }
 
     } catch (err) {
-      setMessages((prev) => [...prev, { role: 'ai', content: "âš ï¸ System connection interrupted due to external provider constraints. Please verify FastAPI console outputs or retry in 60s." }]);
+      setMessages((prev) => [...prev, { role: 'ai', content: "⚠️ System connection interrupted due to external provider constraints. Please verify FastAPI console outputs or retry in 60s." }]);
     } finally {
       setLoading(false);
     }
@@ -560,7 +560,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
       
       // Match 2: Lines that start with a phase/milestone keyword followed by a number
       // e.g. "Milestone 1:", "Phase 2 -", "Weeks 1-4:", "* Weeks 5-12:"
-      const keywordHeaderMatch = trimmed.match(/^(?:[-*â€¢]|\d+\.)?\s*\*\*?(?:Milestone|Phase|Week|Weeks|Step|Sprint|Checkpoint)\s+\d+.*?$/i);
+      const keywordHeaderMatch = trimmed.match(/^(?:[-*•]|\d+\.)?\s*\*\*?(?:Milestone|Phase|Week|Weeks|Step|Sprint|Checkpoint)\s+\d+.*?$/i);
       
       // Match 3: Lines starting with a keyword in plain text (must have a digit and not be bulleted/indented)
       const startsWithKeyword = /^(?:Milestone|Phase|Week|Weeks|Step|Sprint|Checkpoint)\s+\d+/i.test(trimmed);
@@ -587,7 +587,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
           title = cleanMarkdown(headerMatch[2]);
         } else {
           // Clean prefixes like "* ", "1. ", "**", etc.
-          title = cleanMarkdown(trimmed.replace(/^[-*â€¢]\s*/, '').replace(/^\d+\.\s*/, ''));
+          title = cleanMarkdown(trimmed.replace(/^[-*•]\s*/, '').replace(/^\d+\.\s*/, ''));
         }
         
         currentSection = {
@@ -672,7 +672,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
                           ? 'border-slate-700 bg-slate-800 text-slate-400 group-hover:border-slate-600 group-hover:text-slate-200'
                           : 'border-slate-200 bg-white text-slate-400 group-hover:border-slate-350 group-hover:text-slate-600'
                   }`}>
-                    {isCompleted ? 'âœ“' : idx + 1}
+                    {isCompleted ? '✓' : idx + 1}
                   </div>
                   <span className={`text-[10px] mt-2 font-bold tracking-wide transition-colors ${
                     isActive 
@@ -731,7 +731,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
                 isDark ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
               }`}
             >
-              <span>â†</span>
+              <span>←</span>
               <span>Previous</span>
             </button>
             <button
@@ -740,7 +740,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
               className="px-4 py-1.5 bg-[#0252CD] text-white rounded-lg text-xs font-bold hover:bg-[#013CA7] transition-all disabled:opacity-30 disabled:hover:bg-[#0252CD] cursor-pointer flex items-center space-x-1.5"
             >
               <span>Next</span>
-              <span>â†’</span>
+              <span>→</span>
             </button>
           </div>
         </div>
@@ -997,14 +997,14 @@ export default function MentorChat({ student, project, onProjectsChange, current
                   isDark ? 'bg-slate-900/90 border-slate-800 text-slate-100' : 'bg-white/90 border-slate-200/80 text-slate-800'
                 }`}>
                   <p className="text-[10px] font-black text-emerald-400 uppercase tracking-wider flex items-center space-x-1.5">
-                    <span>ðŸ›¡ï¸ Step-by-Step Mitigation Strategy</span>
+                    <span>🛡️ Step-by-Step Mitigation Strategy</span>
                   </p>
                   <ul className="space-y-2">
                     {risk.mitigation.map((strategy, sIndex) => (
                       <li key={sIndex} className={`text-xs flex items-start space-x-2.5 leading-relaxed font-semibold ${
                         isDark ? 'text-slate-300' : 'text-slate-700'
                       }`}>
-                        <span className="select-none shrink-0 text-emerald-500 font-black">âœ“</span>
+                        <span className="select-none shrink-0 text-emerald-500 font-black">✓</span>
                         <span>{strategy}</span>
                       </li>
                     ))}
@@ -1057,7 +1057,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
                       onClick={() => navigator.clipboard.writeText(codeContent)}
                       className="px-2 py-0.5 text-[9px] font-bold text-white hover:text-white bg-blue-600 hover:bg-blue-700 rounded border border-blue-500 transition-all cursor-pointer flex items-center space-x-1"
                     >
-                      <span>ðŸ“‹</span>
+                      <span>📋</span>
                       <span>Copy</span>
                     </button>
                   </div>
@@ -1181,7 +1181,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
                                     onClick={() => navigator.clipboard.writeText(codeContent)}
                                     className="px-2 py-0.5 text-[9px] font-bold text-white hover:text-white bg-blue-600 hover:bg-blue-700 rounded border border-blue-500 transition-all cursor-pointer flex items-center space-x-1"
                                   >
-                                    <span>ðŸ“‹</span>
+                                    <span>📋</span>
                                     <span>Copy</span>
                                   </button>
                                 </div>
@@ -1355,7 +1355,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
                                   onClick={() => navigator.clipboard.writeText(codeContent)}
                                   className="px-2 py-0.5 text-[9px] font-bold text-white hover:text-white bg-blue-600 hover:bg-blue-700 rounded border border-blue-500 transition-all cursor-pointer flex items-center space-x-1"
                                 >
-                                  <span>ðŸ“‹</span>
+                                  <span>📋</span>
                                   <span>Copy</span>
                                 </button>
                               </div>
@@ -1523,7 +1523,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
               <div className="space-y-4 animate-fadeIn">
                 <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-200/80'}`}>
                   <h3 className={`text-base font-bold flex items-center space-x-2 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
-                    <span>ðŸ“</span>
+                    <span>📝</span>
                     <span>Project Evaluation</span>
                   </h3>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
@@ -1558,7 +1558,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
               <div className="space-y-4 animate-fadeIn">
                 <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-200/80'}`}>
                   <h3 className={`text-base font-bold flex items-center space-x-2 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
-                    <span>ðŸ¤</span>
+                    <span>🤝</span>
                     <span>Mentor Advice</span>
                   </h3>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
@@ -1593,7 +1593,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
               <div className="space-y-4 animate-fadeIn">
                 <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-200/80'}`}>
                   <h3 className={`text-base font-bold flex items-center space-x-2 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
-                    <span>ðŸ“š</span>
+                    <span>📚</span>
                     <span>Final Documentation</span>
                   </h3>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
@@ -1628,7 +1628,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
               <div className="space-y-4 animate-fadeIn">
                 <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-200/80'}`}>
                   <h3 className={`text-base font-bold flex items-center space-x-2 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
-                    <span>ðŸ”„</span>
+                    <span>🔄</span>
                     <span>Submit Progress Update</span>
                   </h3>
                 </div>
@@ -1640,7 +1640,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
                 )}
                 {progressError && (
                   <div className="p-3.5 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs font-bold shadow-sm">
-                    âš ï¸ {progressError}
+                    ⚠️ {progressError}
                   </div>
                 )}
 
@@ -1676,14 +1676,14 @@ export default function MentorChat({ student, project, onProjectsChange, current
               <div className="space-y-4 animate-fadeIn">
                 <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-200/80'}`}>
                   <h3 className={`text-base font-bold flex items-center space-x-2 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
-                    <span>ðŸ“…</span>
+                    <span>📅</span>
                     <span>Weekly Check-in</span>
                   </h3>
                 </div>
 
                 {checkinError && (
                   <div className="p-3.5 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs font-bold shadow-sm">
-                    âš ï¸ {checkinError}
+                    ⚠️ {checkinError}
                   </div>
                 )}
 
@@ -1718,14 +1718,14 @@ export default function MentorChat({ student, project, onProjectsChange, current
               <div className="space-y-4 animate-fadeIn">
                 <div className={`flex items-center justify-between border-b pb-3 ${isDark ? 'border-slate-800' : 'border-slate-200/80'}`}>
                   <h3 className={`text-base font-bold flex items-center space-x-2 ${isDark ? 'text-white' : 'text-[#0F172A]'}`}>
-                    <span>ðŸ“„</span>
+                    <span>📄</span>
                     <span>On-Demand Document Generation</span>
                   </h3>
                 </div>
 
                 {docError && (
                   <div className="p-3.5 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs font-bold shadow-sm">
-                    âš ï¸ {docError}
+                    ⚠️ {docError}
                   </div>
                 )}
 
@@ -1765,7 +1765,7 @@ export default function MentorChat({ student, project, onProjectsChange, current
                         onClick={handleDownloadDoc}
                         className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold rounded-lg cursor-pointer flex items-center space-x-1.5 shadow-sm"
                       >
-                        <span>ðŸ“¥</span>
+                        <span>📥</span>
                         <span>Download Markdown</span>
                       </button>
                     </div>

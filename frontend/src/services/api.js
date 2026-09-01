@@ -1,4 +1,4 @@
-﻿import axios from 'axios';
+import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -66,7 +66,7 @@ export const apiService = {
       return {
         project_id: projectId,
         chat_reply: `Responding to your query: "${messageText}". (Running in structural demo mode, connect FastAPI backend to trigger production LangGraph loops).`,
-        agents_executed: ["ðŸ” Skill Assessor", "ðŸ’» Tech Architect"],
+        agents_executed: ["🔍 Skill Assessor", "💻 Tech Architect"],
         skill_report: "Sample dynamic skill assessment document layout...",
         project_evaluation: "Feasibility parameters marked stable...",
         project_plan: "Week 1: Core planning...",
@@ -170,4 +170,3 @@ export const apiService = {
     }
   }
 };
-
