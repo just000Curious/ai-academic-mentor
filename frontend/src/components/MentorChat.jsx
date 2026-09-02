@@ -1295,6 +1295,36 @@ export default function MentorChat({ student, project, onProjectsChange, current
         <form onSubmit={handleSendMessage} className={`p-4 border-t flex items-center gap-3 ${
           isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-50/50 border-slate-100'
         }`}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,.txt,.doc,.docx"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingFile || loading}
+              title="Upload document for RAG context"
+              className={`p-3 rounded-xl transition-all shrink-0 cursor-pointer flex items-center justify-center border disabled:opacity-40 ${
+                uploadSuccess 
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' 
+                  : uploadingFile
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-500 animate-pulse'
+                    : isDark 
+                      ? 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white hover:border-[#0252CD]' 
+                      : 'bg-white border-slate-200 text-slate-500 hover:text-[#0252CD] hover:border-[#0252CD]'
+              }`}
+            >
+              {uploadingFile ? (
+                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+              ) : uploadSuccess ? (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+              )}
+            </button>
           <input
             type="text"
             value={input}
