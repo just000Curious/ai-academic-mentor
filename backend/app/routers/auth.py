@@ -132,9 +132,12 @@ def save_skills(
     return {"status": "success", "message": "Skills saved successfully"}
 
 @router.put("/profile")
-def update_profile(update_data: StudentUpdate, current_user: dict = Depends(get_current_user)):
-    student_id = current_user.get("student_id")
-    if not student_id:
+def update_profile(
+    update_data: StudentUpdate,
+    supabase: Client = Depends(get_supabase),
+    current_student_id: int = Depends(get_current_student_id)
+):
+    if not current_student_id:
         raise HTTPException(status_code=401, detail="Invalid token payload")
         
     update_dict = {}
@@ -148,7 +151,7 @@ def update_profile(update_data: StudentUpdate, current_user: dict = Depends(get_
     if not update_dict:
         return {"status": "success", "message": "No changes requested"}
         
-    res = supabase.table("student").update(update_dict).eq("student_id", student_id).execute()
+    res = supabase.table("student").update(update_dict).eq("student_id", current_student_id).execute()
     if not res.data:
         raise HTTPException(status_code=500, detail="Failed to update profile")
         
