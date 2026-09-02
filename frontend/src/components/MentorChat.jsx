@@ -7,8 +7,26 @@ mermaid.initialize({
   startOnLoad: false,
   theme: 'neutral',
   securityLevel: 'loose',
-  fontFamily: 'Inter, system-ui, sans-serif'
+  fontFamily: 'Inter, system-ui, sans-serif',
+  suppressErrorRendering: true
 });
+
+// Inject global CSS to suppress any mermaid error SVGs that leak into the DOM
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    svg[id^="mermaid"] text[fill="red"],
+    svg text:has(+ text[fill="red"]),
+    .error-icon, .error-text,
+    [id*="mermaid"][style*="position: absolute"] {
+      display: none !important;
+    }
+  `;
+  if (!document.querySelector('[data-mermaid-error-fix]')) {
+    style.setAttribute('data-mermaid-error-fix', 'true');
+    document.head.appendChild(style);
+  }
+}
 
 function MermaidRenderer({ chart }) {
   const [svg, setSvg] = useState('');
@@ -213,6 +231,9 @@ export default function MentorChat({ student, project, onProjectsChange, current
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState('');
+  const fileInputRef = useRef(null);
   const [fetchingMemory, setFetchingMemory] = useState(false);
   const [activeTab, setActiveTab] = useState('chat_reply');
   
@@ -301,6 +322,44 @@ export default function MentorChat({ student, project, onProjectsChange, current
     };
     fetchMemory();
   }, [project?.project_id, student]);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    const allowedTypes = ['application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      setMessages(prev => [...prev, { role: 'ai', content: '⚠️ Please upload a PDF, TXT, or Word document.' }]);
+      return;
+    }
+
+    setUploadingFile(true);
+    setUploadSuccess('');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('student_id', student?.student_id || student?.email || 'unknown');
+      if (project?.project_id) {
+        formData.append('project_id', project.project_id);
+      }
+      const result = await apiService.uploadDocument(formData);
+      setUploadSuccess(file.name);
+      setMessages(prev => [...prev, { 
+        role: 'ai', 
+        content: `📄 **Document "${file.name}" uploaded successfully!**\n\nThe document has been processed and indexed into the RAG knowledge base. You can now ask questions about its content and I will use it as context for my responses.`
+      }]);
+      setTimeout(() => setUploadSuccess(''), 4000);
+    } catch (err) {
+      console.error('Upload failed:', err);
+      setMessages(prev => [...prev, { 
+        role: 'ai', 
+        content: `⚠️ Failed to upload "${file.name}". ${err.response?.data?.detail || 'Please try again.'}`
+      }]);
+    } finally {
+      setUploadingFile(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
