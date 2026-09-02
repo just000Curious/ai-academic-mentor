@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from supabase import Client
 
 from ..database import get_supabase
-from ..schemas import StudentRegister, StudentLogin, TokenResponse, SkillAssessmentCreate
+from ..schemas import StudentRegister, StudentLogin, StudentUpdate, TokenResponse, SkillAssessmentCreate
 from ..auth_utils import hash_password, verify_password, create_access_token, get_current_student_id
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -130,3 +130,26 @@ def save_skills(
     if not res.data:
         raise HTTPException(status_code=500, detail="Failed to save skill assessment")
     return {"status": "success", "message": "Skills saved successfully"}
+
+@router.put("/profile")
+def update_profile(update_data: StudentUpdate, current_user: dict = Depends(get_current_user)):
+    student_id = current_user.get("student_id")
+    if not student_id:
+        raise HTTPException(status_code=401, detail="Invalid token payload")
+        
+    update_dict = {}
+    if update_data.name is not None:
+        update_dict["name"] = update_data.name
+    if update_data.department is not None:
+        update_dict["department"] = update_data.department
+    if update_data.year is not None:
+        update_dict["year"] = update_data.year
+        
+    if not update_dict:
+        return {"status": "success", "message": "No changes requested"}
+        
+    res = supabase.table("student").update(update_dict).eq("student_id", student_id).execute()
+    if not res.data:
+        raise HTTPException(status_code=500, detail="Failed to update profile")
+        
+    return {"status": "success", "message": "Profile updated successfully"}

@@ -7,7 +7,39 @@ export default function ProfileView({ userProfile, onProfileUpdate, currentTheme
   const [newSkill, setNewSkill] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [editForm, setEditForm] = useState({ name: '', department: '', year: '' });
+  const [savingProfile, setSavingProfile] = useState(false);
   const isDark = currentTheme === 'dark';
+
+  
+  const handleOpenProfileEdit = () => {
+    setEditForm({
+      name: userProfile?.fullName || '',
+      department: userProfile?.department || '',
+      year: userProfile?.year || ''
+    });
+    setIsEditingProfile(true);
+  };
+
+  const handleSaveProfile = async () => {
+    setSavingProfile(true);
+    try {
+      await apiService.updateProfile({
+        name: editForm.name,
+        department: editForm.department,
+        year: parseInt(editForm.year) || 1
+      });
+      if (typeof onProfileUpdate === 'function') {
+        await onProfileUpdate();
+      }
+      setIsEditingProfile(false);
+    } catch (err) {
+      console.error('Failed to update profile:', err);
+    } finally {
+      setSavingProfile(false);
+    }
+  };
 
   const handleOpenEdit = () => {
     setEditedSkills(userProfile?.skills || []);
@@ -75,14 +107,66 @@ export default function ProfileView({ userProfile, onProfileUpdate, currentTheme
               </div>
             </div>
             
-            <button className={`px-4 py-2 border font-bold text-sm rounded-xl transition-colors cursor-pointer self-start sm:self-auto mt-4 sm:mt-0 ${
-              isDark ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200'
-            }`}>
-              Edit Profile
-            </button>
+            {!isEditingProfile && (
+              <button 
+                onClick={handleOpenProfileEdit}
+                className={`px-4 py-2 border font-bold text-sm rounded-xl transition-colors cursor-pointer self-start sm:self-auto mt-4 sm:mt-0 ${
+                  isDark ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200'
+                }`}>
+                Edit Profile
+              </button>
+            )}
           </div>
 
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {isEditingProfile ? (
+            <div className="mt-8 space-y-4 max-w-md">
+              <div>
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Full Name</label>
+                <input 
+                  type="text" 
+                  value={editForm.name} 
+                  onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                  className={`mt-1 w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-200'}`}
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Department</label>
+                <input 
+                  type="text" 
+                  value={editForm.department} 
+                  onChange={(e) => setEditForm({...editForm, department: e.target.value})}
+                  className={`mt-1 w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-200'}`}
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Year of Study</label>
+                <input 
+                  type="number" 
+                  min="1" max="5"
+                  value={editForm.year} 
+                  onChange={(e) => setEditForm({...editForm, year: e.target.value})}
+                  className={`mt-1 w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-200'}`}
+                />
+              </div>
+              <div className="flex space-x-3 pt-2">
+                <button 
+                  onClick={handleSaveProfile}
+                  disabled={savingProfile}
+                  className="px-4 py-2 bg-[#0252CD] text-white text-sm font-bold rounded-xl hover:bg-blue-600 transition-colors"
+                >
+                  {savingProfile ? 'Saving...' : 'Save Changes'}
+                </button>
+                <button 
+                  onClick={() => setIsEditingProfile(false)}
+                  disabled={savingProfile}
+                  className={`px-4 py-2 border text-sm font-bold rounded-xl transition-colors ${isDark ? 'border-slate-700 text-slate-300 hover:bg-slate-800' : 'border-slate-300 text-slate-600 hover:bg-slate-100'}`}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+<div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Role</label>
@@ -133,7 +217,8 @@ export default function ProfileView({ userProfile, onProfileUpdate, currentTheme
             </div>
           </div>
           
-        </div>
+
+          )}        </div>
       </div>
 
       {/* Edit Skills Modal overlay */}

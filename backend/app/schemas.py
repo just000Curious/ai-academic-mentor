@@ -10,6 +10,12 @@ class StudentRegister(BaseModel):
     year: int
     mentor_name: Optional[str] = None
 
+
+class StudentUpdate(BaseModel):
+    name: Optional[str] = None
+    department: Optional[str] = None
+    year: Optional[int] = None
+
 class StudentLogin(BaseModel):
     email: str
     password: str
